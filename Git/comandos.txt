@@ -15,7 +15,6 @@ git config --list --show-origin     Muestra donde estan las configuraciones
 git config --global user.name "MyName"          Agrega un nombre de usuario
 git config --global user.mail "obj@example.com" Agrega un correo
 
-
 git log                 Ver el historial de git
 git log <file>          Ver el historial de git en el archivo
 
@@ -36,5 +35,5 @@ BugFixing   --->    HotFixing
 
 git show <file>             Ver los cambios del archivo (SUPER UTIL ESTUDIAR CODIGO)
 
-
+git diff commit1 commit2    Copia los cambios del commit
 
