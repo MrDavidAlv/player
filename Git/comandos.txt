@@ -1,0 +1,40 @@
+git init                Iniciar un nuevo repositorio
+
+git status              Mostrar el estado del repositorio 
+git add <file>          Agregar un archivo para hacer un commit
+git add .               Agregar todo los archivos no agregados 
+git rm --cached <file>  Elimina un archivo agregado 
+
+git commit              Guardar ese cambio
+git commit -m "mesage"  Guarda cambios con un mensaje descriptivo 
+
+git config              Configurar el entorno de variables en Git
+git config --list       Muestra tus configuraciones por defecto de Git 
+git config --list --show-origin     Muestra donde estan las configuraciones
+
+git config --global user.name "MyName"          Agrega un nombre de usuario
+git config --global user.mail "obj@example.com" Agrega un correo
+
+
+git log                 Ver el historial de git
+git log <file>          Ver el historial de git en el archivo
+
+HEAD  :  significa que es la rama mas reciente
+
+            Master
+O---O---O----------------O---O---O  Versión HEAD
+         \               /   |   |
+          \             /    |   | 
+           O---O---O---O     O---O
+            Dev             Bug Fixing
+
+
+Master      --->    Master
+Experiment  --->    Dev/Develompment
+BugFixing   --->    HotFixing
+
+
+git show <file>             Ver los cambios del archivo (SUPER UTIL ESTUDIAR CODIGO)
+
+
+
