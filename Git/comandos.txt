@@ -33,9 +33,5 @@ Experiment  --->    Dev/Develompment
 BugFixing   --->    HotFixing
 
 
-git show <file>             Ver los cambios del archivo (SUPER UTIL ESTUDIAR CODIGO)
-
+git show <file>             Ver los cambios del archivo
 git diff commit1 commit2    Copia los cambios del commit
-
-Git es puper genial
-
