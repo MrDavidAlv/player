@@ -20,18 +20,27 @@ git log <file>          Ver el historial de git en el archivo
 
 HEAD  :  significa que es la rama mas reciente
 
-            Master
-O---O---O----------------O---O---O  Versión HEAD
-         \               /   |   |
-          \             /    |   | 
-           O---O---O---O     O---O
-            Dev             Bug Fixing
+        Master
+O---O---O-------O---O----------O---O---O  Versión HEAD
+         \      |   |         /  
+          \     O---O        /
+           \   Bug Fixing   /
+            \              /                   
+             O---O---O---O
+            Dev             
 
-
+Nombres de ramas 
 Master      --->    Master
 Experiment  --->    Dev/Develompment
 BugFixing   --->    HotFixing
 
 
 git show <file>             Ver los cambios del archivo
-git diff commit1 commit2    Copia los cambios del commit
+git diff <vommit1> <commit2> Compara los cambios del commit1 y el commit2
+
+Crear una nueva rama
+git checkout <branch>       Creara una rama igual a la rama desde donde estas ubicado
+
+git reset <commit>          Regresa tu repositorio a un commit especifico
+git reset <commit> --hard   Regresa todo al estado anterior
+git reset <commit> --soft   Regresa todo al estado anterior pero no borra el stading
