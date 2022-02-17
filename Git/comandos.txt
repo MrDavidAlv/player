@@ -17,6 +17,10 @@ git config --global user.mail "obj@example.com" Agrega un correo
 
 git log                 Ver el historial de git
 git log <file>          Ver el historial de git en el archivo
+git log --online        Muestra nombre y id de un commit
+git log --decorate      Muestra el head point en el log
+git log --stat          Muestra el numero de lineas editadas
+
 
 HEAD  :  significa que es la rama mas reciente
 
@@ -43,4 +47,39 @@ git checkout <branch>       Creara una rama igual a la rama desde donde estas ub
 
 git reset <commit>          Regresa tu repositorio a un commit especifico
 git reset <commit> --hard   Regresa todo al estado anterior
-git reset <commit> --soft   Regresa todo al estado anterior pero no borra el stading
+git reset <commit> --soft   Regresa todo al estado anterior pero no borra el staging
+
+Volver a un commit 
+git checkout <commit>       Vuelve el proyecto a un commit especifico
+git checkout <commit> <file> Vueleve el archivo a un commit especifico
+
+git rm                      Elimina un archivo del proyecto pero no borra su historial como en Git reset
+git rm --cached             Elimina el repositorio local y el staging
+git rm --force              Elimina archivos de git y del disco duro
+git reset HEAD              Sacar archivos del area de staging
+
+
+
+
+                                                         _____________
+                                                        | Repositorio |
+                                                        | Remoto      |
+                                                        |_____________|
+Git Init        Git Add            Git Commit                    .  
+-------->     ----------->         ---------->                  /\
+     _____________       _____________       _____________       |    
+    | Directorio  |     | Preparación |     | Repositorio |      |
+    | Local       |     | Staging     |     | Local       |  ----'
+    |_____________|     |_____________|     |_____________|     Git Push
+
+
+git merge               Actualiza el Directorio local con actualizaciones del repositorio remoto
+git fetch               Actualiza el repositorio local con actualizaciones del repositorio remoto
+
+git pull                Hace git merge y git fetch al tiempo
+
+
+
+            C1          C2
+Master      O------------O 
+                        HEAD 
