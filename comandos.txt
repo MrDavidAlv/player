@@ -93,3 +93,30 @@ rm -f .git/index.lock       Eliminar algun proceso del index.lock
 
 git remote add origin https://git.grupomok.com.co/mario.alvarez/hyperblog-git.git
 
+
+
+//LLAVES PUBLICAS Y PRIVADAS
+
+>>SSH
+En proyecto local creamos una llave publica y una privada 
+
+Crear una llave
+ssh-keygen -t rsa -b 4096 -C "mario.alvarez@grupomok.com"
+
+ver que las llaves esten corriendo
+eval $(ssh-agent -s)
+
+agregar la llave a ese servidor
+cd ~/.ssh/id_rsa 
+
+agregar llave publicada
+ir a setting de gitLab y add_Key_Ssh
+
+Luego conecta el repositorio
+git remote set-url origin git@git.grupomok.com.co:mario.alvarez/hyperblog-git.git
+
+
+
+
+
+
