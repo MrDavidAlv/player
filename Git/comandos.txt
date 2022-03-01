@@ -89,3 +89,4 @@ Master      O------------O
 Crear una nueva rama
 git checkout <branch>       Creara una rama igual a la rama desde donde estas ubicado
 
+rm -f .git/index.lock       Eliminar algun proceso del index.lock
