@@ -4,9 +4,13 @@ git status              Mostrar el estado del repositorio
 git add <file>          Agregar un archivo para hacer un commit
 git add .               Agregar todo los archivos no agregados 
 git rm --cached <file>  Elimina un archivo agregado 
+git commit -am          Guarda archivos que tienen cambios y ya se habian agregado 
+                        Ingresa texto precionando (space + i)
+                        guardar y salir (space + shift + zz)
 
 git commit              Guardar ese cambio
-git commit -m "mesage"  Guarda cambios con un mensaje descriptivo 
+git commit -m "mesage"  Guarda cambios con un mensaje descriptivo
+git commit -a           Abre un entorno para ingresar el nombre del commit 
 
 git config              Configurar el entorno de variables en Git
 git config --list       Muestra tus configuraciones por defecto de Git 
@@ -41,9 +45,6 @@ BugFixing   --->    HotFixing
 
 git show <file>             Ver los cambios del archivo
 git diff <vommit1> <commit2> Compara los cambios del commit1 y el commit2
-
-Crear una nueva rama
-git checkout <branch>       Creara una rama igual a la rama desde donde estas ubicado
 
 git reset <commit>          Regresa tu repositorio a un commit especifico
 git reset <commit> --hard   Regresa todo al estado anterior
@@ -83,3 +84,9 @@ git pull                Hace git merge y git fetch al tiempo
             C1          C2
 Master      O------------O 
                         HEAD 
+
+
+Crear una nueva rama
+git checkout <branch>       Creara una rama igual a la rama desde donde estas ubicado
+
+rm -f .git/index.lock       Eliminar algun proceso del index.lock
