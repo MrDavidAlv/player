@@ -117,6 +117,41 @@ git remote set-url origin git@git.grupomok.com.co:mario.alvarez/hyperblog-git.gi
 
 
 
+TAGS y VERSIONES, son utiles en github o gitlab
+git log --all --graph           Muestra los commits y dibuja las ramas
+q
+
+alias en linux 
+alias nombre="comando de linux"
+
+Creando un tag 
+git tag -a nombre -m "resultado de las primeras clases de Git con Platzi" 90b63db
+
+ver tags
+git show-ref --tags 
+
+subir tags
+git push origin --tags
+
+borrar tag errado
+git tag -d nombre                       Borra el tag en repositorio local
+git push origin :refs/tags/nombre_tag   Borra el tag en repositorio remoto
+
+
+RAMAS EN GIT 
+git branch              Lista las ramas existentes
+git checkout nomeBranch Cambiarse a otra rama
+git show-branch         Muestra ramas y su historia
+git show-branch --all   Muestra mas informacion de las ramas
+
+gitk                    Abre software con informacion de las ramas
+
+
+
+
+
+
+GITHUB
 
 
 

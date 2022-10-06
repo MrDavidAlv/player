@@ -1,0 +1,149 @@
+git init                Iniciar un nuevo repositorio
+
+git status              Mostrar el estado del repositorio 
+git add <file>          Agregar un archivo para hacer un commit
+git add .               Agregar todo los archivos no agregados 
+git rm --cached <file>  Elimina un archivo agregado 
+git commit -am          Guarda archivos que tienen cambios y ya se habian agregado 
+                        Ingresa texto precionando (space + i)
+                        guardar y salir (space + shift + zz)
+
+git commit              Guardar ese cambio
+git commit -m "mesage"  Guarda cambios con un mensaje descriptivo
+git commit -a           Abre un entorno para ingresar el nombre del commit 
+
+git config              Configurar el entorno de variables en Git
+git config --list       Muestra tus configuraciones por defecto de Git 
+git config --list --show-origin     Muestra donde estan las configuraciones
+
+git config --global user.name "MyName"          Agrega un nombre de usuario
+git config --global user.mail "obj@example.com" Agrega un correo
+
+git log                 Ver el historial de git
+git log <file>          Ver el historial de git en el archivo
+git log --online        Muestra nombre y id de un commit
+git log --decorate      Muestra el head point en el log
+git log --stat          Muestra el numero de lineas editadas
+
+
+HEAD  :  significa que es la rama mas reciente
+
+        Master
+O---O---O-------O---O----------O---O---O  Versión HEAD
+         \      |   |         /  
+          \     O---O        /
+           \   Bug Fixing   /
+            \              /                   
+             O---O---O---O
+            Dev             
+
+Nombres de ramas 
+Master      --->    Master
+Experiment  --->    Dev/Develompment
+BugFixing   --->    HotFixing
+
+
+git show <file>             Ver los cambios del archivo
+git diff <vommit1> <commit2> Compara los cambios del commit1 y el commit2
+
+git reset <commit>          Regresa tu repositorio a un commit especifico
+git reset <commit> --hard   Regresa todo al estado anterior
+git reset <commit> --soft   Regresa todo al estado anterior pero no borra el staging
+
+Volver a un commit 
+git checkout <commit>       Vuelve el proyecto a un commit especifico
+git checkout <commit> <file> Vueleve el archivo a un commit especifico
+
+git rm                      Elimina un archivo del proyecto pero no borra su historial como en Git reset
+git rm --cached             Elimina el repositorio local y el staging
+git rm --force              Elimina archivos de git y del disco duro
+git reset HEAD              Sacar archivos del area de staging
+
+
+
+
+                                                         _____________
+                                                        | Repositorio |
+                                                        | Remoto      |
+                                                        |_____________|
+Git Init        Git Add            Git Commit                    .  
+-------->     ----------->         ---------->                  /\
+     _____________       _____________       _____________       |    
+    | Directorio  |     | Preparación |     | Repositorio |      |
+    | Local       |     | Staging     |     | Local       |  ----'
+    |_____________|     |_____________|     |_____________|     Git Push
+
+
+git merge               Actualiza el Directorio local con actualizaciones del repositorio remoto
+git fetch               Actualiza el repositorio local con actualizaciones del repositorio remoto
+
+git pull                Hace git merge y git fetch al tiempo
+
+
+
+            C1          C2
+Master      O------------O 
+                        HEAD 
+
+
+Crear una nueva rama
+git checkout <branch>       Creara una rama igual a la rama desde donde estas ubicado
+
+rm -f .git/index.lock       Eliminar algun proceso del index.lock
+
+git remote add origin https://git.grupomok.com.co/mario.alvarez/hyperblog-git.git
+
+
+
+//LLAVES PUBLICAS Y PRIVADAS
+
+>>SSH
+En proyecto local creamos una llave publica y una privada 
+
+Crear una llave
+ssh-keygen -t rsa -b 4096 -C "mario.alvarez@grupomok.com"
+
+ver que las llaves esten corriendo
+eval $(ssh-agent -s)
+
+agregar la llave a ese servidor
+cd ~/.ssh/id_rsa 
+
+agregar llave publicada
+ir a setting de gitLab y add_Key_Ssh
+
+Luego conecta el repositorio
+git remote set-url origin git@git.grupomok.com.co:mario.alvarez/hyperblog-git.git
+
+
+
+TAGS y VERSIONES, son utiles en github o gitlab
+git log --all --graph           Muestra los commits y dibuja las ramas
+q
+
+alias en linux 
+alias nombre="comando de linux"
+
+Creando un tag 
+git tag -a nombre -m "resultado de las primeras clases de Git con Platzi" 90b63db
+
+ver tags
+git show-ref --tags 
+
+subir tags
+git push origin --tags
+
+borrar tag errado
+git tag -d nombre                       Borra el tag en repositorio local
+git push origin :refs/tags/nombre_tag   Borra el tag en repositorio remoto
+
+
+RAMAS EN GIT 
+git branch              Lista las ramas existentes
+git checkout nomeBranch Cambiarse a otra rama
+git show-branch         Muestra ramas y su historia
+git show-branch --all   Muestra mas informacion de las ramas
+
+gitk            Abre software con informacion de las ramas
+
+
