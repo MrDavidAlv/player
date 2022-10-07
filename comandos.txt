@@ -153,5 +153,14 @@ gitk                    Abre software con informacion de las ramas
 
 GITHUB
 
+git remote add origin URL 
+git pull origin master --allow-unrelated-histories
+
+ssh-keygen -t rsa -b 4096 -C "youremail@example.com"
+eval $(ssh-agent -s)
+ssh-add ~/.ssh/id_rsa
+
+
+
 
 
