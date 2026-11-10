@@ -1,1 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
 
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ncs-player</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="shell">
+
+    <!-- Barra superior -->
+    <header class="topbar">
+      <div class="brand">
+        <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="path">~/music/ncs</span>
+        <span class="sep">$</span>
+        <span class="cmd">ncs-player</span>
+      </div>
+      <div class="topbar-meta">
+        <span><b id="track-count">0</b> tracks</span>
+        <span class="divider">|</span>
+        <span>v2.0</span>
+      </div>
+    </header>
+
+    <main class="layout">
+
+      <!-- Reproductor -->
+      <section class="panel deck" aria-label="Reproductor">
+        <div class="panel-head">
+          <span>// now_playing</span>
+          <span id="status" class="status" data-state="idle">idle</span>
+        </div>
+
+        <div class="now">
+          <div class="now-index" id="now-index">00 / 00</div>
+          <h1 class="now-title" id="now-title">Selecciona una pista</h1>
+          <p class="now-artist" id="now-artist">—</p>
+        </div>
+
+        <div class="viz-wrap">
+          <canvas id="viz" class="viz" aria-hidden="true"></canvas>
+        </div>
+
+        <div class="timeline">
+          <span id="time-current" class="time">00:00</span>
+          <input type="range" id="seek" class="range" min="0" max="1000" value="0" step="1" aria-label="Posición de la pista">
+          <span id="time-total" class="time">00:00</span>
+        </div>
+
+        <div class="controls">
+          <button id="btn-shuffle" class="btn btn-text" title="Aleatorio (S)" aria-pressed="false">SHF</button>
+
+          <button id="btn-prev" class="btn" title="Anterior (P)" aria-label="Anterior">
+            <svg viewBox="0 0 24 24">
+              <path d="M6 5h2v14H6zM20 5v14L9 12z" />
+            </svg>
+          </button>
+
+          <button id="btn-play" class="btn btn-main" title="Reproducir / Pausa (Espacio)" aria-label="Reproducir">
+            <svg class="ico-play" viewBox="0 0 24 24">
+              <path d="M7 4v16l13-8z" />
+            </svg>
+            <svg class="ico-pause" viewBox="0 0 24 24">
+              <path d="M6 4h4v16H6zM14 4h4v16h-4z" />
+            </svg>
+          </button>
+
+          <button id="btn-next" class="btn" title="Siguiente (N)" aria-label="Siguiente">
+            <svg viewBox="0 0 24 24">
+              <path d="M16 5h2v14h-2zM4 5v14l11-7z" />
+            </svg>
+          </button>
+
+          <button id="btn-repeat" class="btn btn-text" title="Repetir (R)" aria-pressed="false">RPT</button>
+        </div>
+
+        <div class="volume">
+          <label for="volume">vol</label>
+          <input type="range" id="volume" class="range" min="0" max="100" value="80" aria-label="Volumen">
+          <span id="vol-value" class="time">80</span>
+        </div>
+
+        <dl class="shortcuts">
+          <div>
+            <dt>space</dt>
+            <dd>play / pausa</dd>
+          </div>
+          <div>
+            <dt>← →</dt>
+            <dd>±5 s</dd>
+          </div>
+          <div>
+            <dt>↑ ↓</dt>
+            <dd>volumen</dd>
+          </div>
+          <div>
+            <dt>n / p</dt>
+            <dd>sig. / ant.</dd>
+          </div>
+          <div>
+            <dt>s / r</dt>
+            <dd>shuffle / repeat</dd>
+          </div>
+          <div>
+            <dt>/</dt>
+            <dd>buscar</dd>
+          </div>
+        </dl>
+      </section>
+
+      <!-- Playlist -->
+      <section class="panel library" aria-label="Lista de reproducción">
+        <div class="panel-head">
+          <span>// playlist</span>
+          <span id="visible-count" class="muted"></span>
+        </div>
+
+        <div class="search">
+          <span class="search-label">grep</span>
+          <input id="filter" type="search" placeholder="artista o título…" autocomplete="off" spellcheck="false" aria-label="Filtrar pistas">
+          <kbd>/</kbd>
+        </div>
+
+        <ol id="playlist" class="playlist"></ol>
+      </section>
+
+    </main>
+
+    <footer class="footer">
+      <span>audio: <a href="https://archive.org/details/274_Song_NCS_ultimate_mix" target="_blank" rel="noopener noreferrer">archive.org / 274 NCS songs</a></span>
+      <span class="divider">·</span>
+      <span>música: NoCopyrightSounds</span>
+      <span class="divider">·</span>
+      <span>idea original: <a href="https://github.com/MrDavidAlv" target="_blank" rel="noopener noreferrer">MrDavidAlv</a></span>
+    </footer>
+  </div>
+
+  <audio id="audio" preload="none" crossorigin="anonymous"></audio>
+  <script src="script.js"></script>
+</body>
+
+</html>
