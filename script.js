@@ -1,14 +1,10 @@
-/* ==========================================================
-   ncs-player — lógica del reproductor
-   Sin dependencias. Audio: archive.org (NCS ultimate mix)
-   ========================================================== */
-
 (() => {
   "use strict";
 
   // ---------- Datos ----------
 
-  const BASE_URL = "https://dn720306.ca.archive.org/0/items/274_Song_NCS_ultimate_mix/";
+  const BASE_URL =
+    "https://dn720306.ca.archive.org/0/items/274_Song_NCS_ultimate_mix/";
 
   const FILES = [
     // Prioritarias
@@ -57,7 +53,7 @@
       id,
       file,
       artist: cut > -1 ? clean.slice(0, cut) : "Unknown Artist",
-      title:  cut > -1 ? clean.slice(cut + 3) : clean,
+      title: cut > -1 ? clean.slice(cut + 3) : clean,
       url: BASE_URL + encodeURIComponent(file),
       duration: null,
       error: false
@@ -73,40 +69,46 @@
       try {
         const v = localStorage.getItem("ncs-player:" + key);
         return v === null ? fallback : JSON.parse(v);
-      } catch { return fallback; }
+      } catch {
+        return fallback;
+      }
     },
     set(key, value) {
-      try { localStorage.setItem("ncs-player:" + key, JSON.stringify(value)); } catch {}
+      try {
+        localStorage.setItem("ncs-player:" + key, JSON.stringify(value));
+      } catch {}
     }
   };
 
   const cachedDurations = store.get("durations", {});
-  tracks.forEach(t => { if (cachedDurations[t.file]) t.duration = cachedDurations[t.file]; });
+  tracks.forEach((t) => {
+    if (cachedDurations[t.file]) t.duration = cachedDurations[t.file];
+  });
 
   // ---------- DOM ----------
 
-  const $ = id => document.getElementById(id);
-  const audio      = $("audio");
+  const $ = (id) => document.getElementById(id);
+  const audio = $("audio");
   const el = {
-    count:    $("track-count"),
-    visible:  $("visible-count"),
-    status:   $("status"),
-    index:    $("now-index"),
-    title:    $("now-title"),
-    artist:   $("now-artist"),
-    canvas:   $("viz"),
-    seek:     $("seek"),
-    tCur:     $("time-current"),
-    tTot:     $("time-total"),
-    play:     $("btn-play"),
-    prev:     $("btn-prev"),
-    next:     $("btn-next"),
-    shuffle:  $("btn-shuffle"),
-    repeat:   $("btn-repeat"),
-    volume:   $("volume"),
+    count: $("track-count"),
+    visible: $("visible-count"),
+    status: $("status"),
+    index: $("now-index"),
+    title: $("now-title"),
+    artist: $("now-artist"),
+    canvas: $("viz"),
+    seek: $("seek"),
+    tCur: $("time-current"),
+    tTot: $("time-total"),
+    play: $("btn-play"),
+    prev: $("btn-prev"),
+    next: $("btn-next"),
+    shuffle: $("btn-shuffle"),
+    repeat: $("btn-repeat"),
+    volume: $("volume"),
     volValue: $("vol-value"),
-    filter:   $("filter"),
-    list:     $("playlist")
+    filter: $("filter"),
+    list: $("playlist")
   };
 
   // ---------- Estado ----------
@@ -114,7 +116,7 @@
   const state = {
     current: -1,
     shuffle: store.get("shuffle", false),
-    repeat:  store.get("repeat", "off"),   // off | all | one
+    repeat: store.get("repeat", "off"), // off | all | one
     seeking: false,
     history: [],
     errorStreak: 0
@@ -122,7 +124,7 @@
 
   // ---------- Utilidades ----------
 
-  const pad = n => String(n).padStart(2, "0");
+  const pad = (n) => String(n).padStart(2, "0");
 
   function fmt(sec) {
     if (!isFinite(sec) || sec < 0) return "--:--";
@@ -169,14 +171,19 @@
     updateVisibleCount(tracks.length);
   }
 
-  function rowAt(i) { return el.list.querySelector(`[data-index="${i}"]`); }
+  function rowAt(i) {
+    return el.list.querySelector(`[data-index="${i}"]`);
+  }
 
   function updateVisibleCount(n) {
-    el.visible.textContent = n === tracks.length ? `${n} items` : `${n} / ${tracks.length}`;
+    el.visible.textContent =
+      n === tracks.length ? `${n} items` : `${n} / ${tracks.length}`;
   }
 
   function highlightRow(i) {
-    el.list.querySelectorAll(".track.is-active").forEach(r => r.classList.remove("is-active"));
+    el.list
+      .querySelectorAll(".track.is-active")
+      .forEach((r) => r.classList.remove("is-active"));
     const row = rowAt(i);
     if (row) {
       row.classList.add("is-active");
@@ -184,15 +191,18 @@
     }
   }
 
-  el.list.addEventListener("click", e => {
+  el.list.addEventListener("click", (e) => {
     const row = e.target.closest(".track");
     if (row) loadTrack(+row.dataset.index, true);
   });
 
-  el.list.addEventListener("keydown", e => {
+  el.list.addEventListener("keydown", (e) => {
     const row = e.target.closest(".track");
     if (!row) return;
-    if (e.key === "Enter") { e.preventDefault(); loadTrack(+row.dataset.index, true); }
+    if (e.key === "Enter") {
+      e.preventDefault();
+      loadTrack(+row.dataset.index, true);
+    }
   });
 
   // Filtro
@@ -218,10 +228,15 @@
 
   // ---------- Audio graph + visualizador ----------
 
-  let ctx = null, analyser = null, freqData = null;
+  let ctx = null,
+    analyser = null,
+    freqData = null;
 
   function initAudioGraph() {
-    if (ctx) { if (ctx.state === "suspended") ctx.resume(); return; }
+    if (ctx) {
+      if (ctx.state === "suspended") ctx.resume();
+      return;
+    }
     try {
       const AC = window.AudioContext || window.webkitAudioContext;
       ctx = new AC();
@@ -241,13 +256,13 @@
   const viz = el.canvas.getContext("2d");
   const css = getComputedStyle(document.documentElement);
   const COLOR_ACCENT = css.getPropertyValue("--accent").trim() || "#d6a556";
-  const COLOR_GRID   = css.getPropertyValue("--line").trim()   || "#252a31";
-  const COLOR_DIM    = css.getPropertyValue("--dim").trim()    || "#545b65";
+  const COLOR_GRID = css.getPropertyValue("--line").trim() || "#252a31";
+  const COLOR_DIM = css.getPropertyValue("--dim").trim() || "#545b65";
 
   function resizeCanvas() {
     const dpr = window.devicePixelRatio || 1;
     const { width, height } = el.canvas.getBoundingClientRect();
-    el.canvas.width  = Math.round(width * dpr);
+    el.canvas.width = Math.round(width * dpr);
     el.canvas.height = Math.round(height * dpr);
     viz.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
@@ -325,7 +340,8 @@
     el.artist.textContent = t.artist;
     el.tCur.textContent = "00:00";
     el.tTot.textContent = fmt(t.duration);
-    el.seek.value = 0; setRangeFill(el.seek);
+    el.seek.value = 0;
+    setRangeFill(el.seek);
     document.title = `${t.title} · ${t.artist} — ncs-player`;
 
     highlightRow(i);
@@ -337,21 +353,31 @@
   }
 
   function play() {
-    if (state.current === -1) { loadTrack(0, false); }
+    if (state.current === -1) {
+      loadTrack(0, false);
+    }
     initAudioGraph();
     setStatus("loading");
     const p = audio.play();
-    if (p && p.catch) p.catch(err => {
-      if (err.name !== "AbortError") { console.warn(err); setStatus("paused"); }
-    });
+    if (p && p.catch)
+      p.catch((err) => {
+        if (err.name !== "AbortError") {
+          console.warn(err);
+          setStatus("paused");
+        }
+      });
   }
 
-  function togglePlay() { audio.paused ? play() : audio.pause(); }
+  function togglePlay() {
+    audio.paused ? play() : audio.pause();
+  }
 
   function nextIndex() {
     if (state.shuffle && tracks.length > 1) {
       let r;
-      do { r = Math.floor(Math.random() * tracks.length); } while (r === state.current);
+      do {
+        r = Math.floor(Math.random() * tracks.length);
+      } while (r === state.current);
       return r;
     }
     const n = state.current + 1;
@@ -362,7 +388,12 @@
   function next(auto = false) {
     const n = nextIndex();
     if (n === -1) {
-      if (auto) { audio.pause(); audio.currentTime = 0; setStatus("idle"); return; }
+      if (auto) {
+        audio.pause();
+        audio.currentTime = 0;
+        setStatus("idle");
+        return;
+      }
       loadTrack(0, !audio.paused);
       return;
     }
@@ -370,7 +401,10 @@
   }
 
   function prev() {
-    if (audio.currentTime > 3) { audio.currentTime = 0; return; }
+    if (audio.currentTime > 3) {
+      audio.currentTime = 0;
+      return;
+    }
     const wasPlaying = !audio.paused;
     if (state.history.length) {
       loadTrack(state.history.pop(), wasPlaying, false);
@@ -416,7 +450,11 @@
   });
 
   audio.addEventListener("ended", () => {
-    if (state.repeat === "one") { audio.currentTime = 0; play(); return; }
+    if (state.repeat === "one") {
+      audio.currentTime = 0;
+      play();
+      return;
+    }
     next(true);
   });
 
@@ -444,7 +482,12 @@
   function renderModes() {
     el.shuffle.setAttribute("aria-pressed", state.shuffle);
     el.repeat.setAttribute("aria-pressed", state.repeat !== "off");
-    el.repeat.textContent = state.repeat === "one" ? "RPT:1" : state.repeat === "all" ? "RPT:∞" : "RPT";
+    el.repeat.textContent =
+      state.repeat === "one"
+        ? "RPT:1"
+        : state.repeat === "all"
+        ? "RPT:∞"
+        : "RPT";
   }
 
   el.shuffle.addEventListener("click", () => {
@@ -454,7 +497,8 @@
   });
 
   el.repeat.addEventListener("click", () => {
-    state.repeat = state.repeat === "off" ? "all" : state.repeat === "all" ? "one" : "off";
+    state.repeat =
+      state.repeat === "off" ? "all" : state.repeat === "all" ? "one" : "off";
     store.set("repeat", state.repeat);
     renderModes();
   });
@@ -463,10 +507,12 @@
   el.seek.addEventListener("input", () => {
     state.seeking = true;
     setRangeFill(el.seek);
-    if (isFinite(audio.duration)) el.tCur.textContent = fmt((el.seek.value / 1000) * audio.duration);
+    if (isFinite(audio.duration))
+      el.tCur.textContent = fmt((el.seek.value / 1000) * audio.duration);
   });
   el.seek.addEventListener("change", () => {
-    if (isFinite(audio.duration)) audio.currentTime = (el.seek.value / 1000) * audio.duration;
+    if (isFinite(audio.duration))
+      audio.currentTime = (el.seek.value / 1000) * audio.duration;
     state.seeking = false;
   });
 
@@ -483,9 +529,11 @@
 
   // ---------- Teclado ----------
 
-  document.addEventListener("keydown", e => {
+  document.addEventListener("keydown", (e) => {
     if (e.target === el.filter) {
-      if (e.key === "Escape") { el.filter.blur(); }
+      if (e.key === "Escape") {
+        el.filter.blur();
+      }
       return;
     }
     if (e.ctrlKey || e.metaKey || e.altKey) return;
@@ -495,24 +543,50 @@
     switch (e.key) {
       case " ":
         if (tag === "BUTTON") return;
-        e.preventDefault(); togglePlay(); break;
+        e.preventDefault();
+        togglePlay();
+        break;
       case "ArrowRight":
         if (onRange) return;
-        e.preventDefault(); if (isFinite(audio.duration)) audio.currentTime = Math.min(audio.duration, audio.currentTime + 5); break;
+        e.preventDefault();
+        if (isFinite(audio.duration))
+          audio.currentTime = Math.min(audio.duration, audio.currentTime + 5);
+        break;
       case "ArrowLeft":
         if (onRange) return;
-        e.preventDefault(); audio.currentTime = Math.max(0, audio.currentTime - 5); break;
+        e.preventDefault();
+        audio.currentTime = Math.max(0, audio.currentTime - 5);
+        break;
       case "ArrowUp":
         if (onRange) return;
-        e.preventDefault(); setVolume(+el.volume.value + 5); break;
+        e.preventDefault();
+        setVolume(+el.volume.value + 5);
+        break;
       case "ArrowDown":
         if (onRange) return;
-        e.preventDefault(); setVolume(+el.volume.value - 5); break;
-      case "n": case "N": next(false); break;
-      case "p": case "P": prev(); break;
-      case "s": case "S": el.shuffle.click(); break;
-      case "r": case "R": el.repeat.click(); break;
-      case "/": e.preventDefault(); el.filter.focus(); break;
+        e.preventDefault();
+        setVolume(+el.volume.value - 5);
+        break;
+      case "n":
+      case "N":
+        next(false);
+        break;
+      case "p":
+      case "P":
+        prev();
+        break;
+      case "s":
+      case "S":
+        el.shuffle.click();
+        break;
+      case "r":
+      case "R":
+        el.repeat.click();
+        break;
+      case "/":
+        e.preventDefault();
+        el.filter.focus();
+        break;
     }
   });
 
@@ -545,6 +619,10 @@
   requestAnimationFrame(draw);
 
   const last = store.get("last", 0);
-  loadTrack(Number.isInteger(last) && last < tracks.length ? last : 0, false, false);
+  loadTrack(
+    Number.isInteger(last) && last < tracks.length ? last : 0,
+    false,
+    false
+  );
   setStatus("idle");
 })();
