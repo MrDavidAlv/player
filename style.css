@@ -7,8 +7,8 @@
   --text: #d3d7dd;
   --muted: #7c838d;
   --dim: #545b65;
-  --accent: #d6a556; /* ámbar apagado */
-  --accent-2: #8fb3a0; /* verde salvia para estados */
+  --accent: #38c2ff; /* cian */
+  --accent-2: #2f8cff; /* azul (variante legible de #016eea) */
   --danger: #c97064;
 
   --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas,
@@ -109,6 +109,18 @@ button {
   height: 10px;
   border-radius: 50%;
   background: var(--line-2);
+}
+.prompt {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.prompt .sep {
+  margin: 0 1px;
+}
+.who {
+  color: var(--accent);
 }
 .path {
   color: var(--accent-2);
@@ -215,6 +227,17 @@ button {
   color: var(--accent);
 }
 
+.now-meta {
+  margin-top: 6px;
+  min-height: 1.5em;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .viz-wrap {
   margin: 4px 20px 0;
   border: 1px solid var(--line);
@@ -225,7 +248,31 @@ button {
 .viz {
   display: block;
   width: 100%;
-  height: 110px;
+  height: 140px;
+  cursor: pointer;
+}
+
+.viz-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  border-top: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--dim);
+  font-variant-numeric: tabular-nums;
+}
+.viz-mode {
+  color: var(--muted);
+}
+.viz-mode::after {
+  content: " ⇄";
+  color: var(--dim);
+}
+.viz-mode:hover {
+  color: var(--accent);
 }
 
 .timeline,
@@ -383,30 +430,92 @@ button {
   background: var(--accent);
 }
 
-/* ---------- Atajos ---------- */
+/* ---------- Playlist ---------- */
 
-.shortcuts {
+.library {
+  position: relative;
+}
+.library.is-drop {
+  border-color: var(--accent);
+}
+.library.is-drop::after {
+  content: "suelta la carpeta para escucharla";
+  position: absolute;
+  inset: 0;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 6px 16px;
-  padding: 14px 20px;
-  border-top: 1px solid var(--line);
+  place-items: center;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  border: 1px dashed var(--accent);
+  border-radius: var(--radius);
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--accent);
+  pointer-events: none;
+}
+
+.sources {
+  display: flex;
+  gap: 6px;
+  min-width: 0;
+}
+.src-btn {
+  max-width: 160px;
+  padding: 1px 8px;
+  border: 1px solid var(--line-2);
+  border-radius: 3px;
   font-family: var(--mono);
   font-size: 11px;
-}
-.shortcuts div {
-  display: flex;
-  gap: 8px;
-}
-.shortcuts dt {
-  color: var(--text);
-  min-width: 46px;
-}
-.shortcuts dd {
   color: var(--dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: border-color 0.15s, color 0.15s;
+}
+.src-btn:hover {
+  color: var(--text);
+  border-color: var(--muted);
+}
+.src-btn[aria-pressed="true"] {
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 50%, transparent);
+}
+#src-ncs,
+.src-open {
+  flex-shrink: 0;
+}
+.src-open {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 9px;
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  background: color-mix(in srgb, var(--accent) 9%, transparent);
+}
+.src-open:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+}
+.src-open svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
-/* ---------- Playlist ---------- */
+.notice {
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--accent-2);
+  overflow-wrap: anywhere;
+}
 
 .search {
   display: flex;
@@ -527,6 +636,44 @@ kbd {
   color: var(--accent);
 }
 
+.group {
+  display: grid;
+  grid-template-columns: 14px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 16px;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg);
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--accent-2);
+  cursor: pointer;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.group:hover,
+.group:focus-visible {
+  outline: none;
+  color: var(--text);
+}
+.group-caret::before {
+  content: "▾";
+  color: var(--dim);
+}
+.group[aria-expanded="false"] .group-caret::before {
+  content: "▸";
+}
+.group-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.group-count {
+  color: var(--dim);
+  font-variant-numeric: tabular-nums;
+}
+
 .track.has-error .track-title {
   color: var(--danger);
   text-decoration: line-through;
@@ -547,11 +694,31 @@ kbd {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  align-items: center;
   gap: 8px;
   padding: 6px 0 2px;
   font-family: var(--mono);
   font-size: 11px;
   color: var(--muted);
+}
+
+.social {
+  display: inline-flex;
+  gap: 10px;
+}
+.social a {
+  display: inline-flex;
+  border: 0;
+  color: var(--dim);
+  transition: color 0.15s;
+}
+.social a:hover {
+  color: var(--accent);
+}
+.social svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
 }
 
 /* ---------- Responsive ---------- */
@@ -578,9 +745,12 @@ kbd {
     font-size: 12px;
   }
   .dots,
-  .path,
+  .prompt,
   .sep {
     display: none;
+  }
+  .viz {
+    height: 120px;
   }
   .now {
     padding: 18px 16px 12px;
@@ -596,7 +766,13 @@ kbd {
     padding-left: 16px;
     padding-right: 16px;
   }
-  .shortcuts {
+  .panel-head {
+    gap: 10px;
+  }
+  .library .panel-head {
+    justify-content: flex-end;
+  }
+  .library .panel-head > span:first-child {
     display: none;
   }
 }
